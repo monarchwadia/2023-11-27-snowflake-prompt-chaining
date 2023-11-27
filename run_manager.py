@@ -34,7 +34,7 @@ class RunManager:
         
     def l4_inference(self, prompt: str) -> ChatCompletionMessage:
         L4_PROMPT = Path('./l4_prompt.md').read_text()
-        return self.simple_inference(prompt, model="gpt-4", messages=[{"role": "system", "content": L4_PROMPT}])
+        return self.simple_inference(prompt, messages=[{"role": "system", "content": L4_PROMPT}])
 
     def simple_inference(self, prompt: str, messages: list[ChatCompletionMessage] = [], model="gpt-3.5-turbo") -> ChatCompletionMessage:
         self.logger.info(f"inference ran with prompt:\n====================\n{prompt}\n====================")
@@ -53,7 +53,7 @@ class RunManager:
 
     def code_cleanup_inference(self, prompt: str) -> ChatCompletionMessage:
         CLEANUP_PROMPT = Path('./cleanup_prompt.md').read_text()
-        return self.simple_inference(prompt, model="gpt-3.5-turbo", messages=[{"role": "user", "content": CLEANUP_PROMPT}])
+        return self.simple_inference(prompt, model="gpt-4-1106-preview", messages=[{"role": "user", "content": CLEANUP_PROMPT}])
     
     def save_result(self, result: str):
         self.result_path.write_text(result)

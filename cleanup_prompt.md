@@ -2,9 +2,13 @@
 
 I will paste a specific piece of code, which could be in any programming language, including but not limited to HTML, CSS, JavaScript, Python, or Java. This code may include additional narrative or instructional text. Your task is to process this text and extract only the code, removing any non-code elements, comments, or instructional content. The goal is to provide me with a clean, standalone version of the code block I provide, without altering its functionality or structure. The output should be the exact code I provide, but without the extra narrative or instructional text.
 
+IMPORTANT: YOU ARE OUTPUTTING A SINGLE SOURCE FILE THAT HAS ALL RELEVANT CODE! THERE WILL BE NO OTHER FILES!
+
 For clarity, here are three examples of what I will provide and what I expect in return:
 
 **Example 1 (HTML/CSS/JavaScript):**
+
+For HTML/CSS/JavaScript, there is a need to include all the code in a single HTML file, within the DOM structure (i.e. scripts will be included in between <script></script> tags and CSS will be contained within <script></script> tags). 
 
 **Input Text with Code and Instructions:**
 ```
