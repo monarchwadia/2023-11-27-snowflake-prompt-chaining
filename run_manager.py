@@ -8,11 +8,7 @@ import logging
 from datetime import datetime
 
 # Constants & configurations
-L4_PROMPT = Path('./prompt.md').read_text()
 logging.basicConfig(filename='.log', encoding='utf-8', level=logging.INFO)
-
-# Variables
-messages: list[ChatCompletionMessage] = []
 
 class RunManager:
     """
@@ -36,14 +32,16 @@ class RunManager:
         # configure result to output to file
         self.result_path = Path(f'.output/{self.time}/.result.md')
         
-    def inference(self, prompt: str) -> ChatCompletionMessage:
+    def l4_inference(self, prompt: str) -> ChatCompletionMessage:
+        L4_PROMPT = Path('./l4_prompt.md').read_text()
+        return self.simple_inference(prompt, messages=[{"role": "system", "content": L4_PROMPT}])
+
+    def simple_inference(self, prompt: str, messages: list[ChatCompletionMessage] = [], model="gpt-3.5-turbo") -> ChatCompletionMessage:
         self.logger.info(f"inference ran with prompt:\n====================\n{prompt}\n====================")
-        global messages
         client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
         completion = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model=model,
             messages=messages + [
-                {"role": "system", "content": L4_PROMPT},
                 {"role": "user", "content": prompt}
             ]
         )
@@ -52,6 +50,10 @@ class RunManager:
         content = returned_message.content
         self.logger.info(f"API returned with content:\n====================\n{content}\n====================")
         return content
+
+    def code_cleanup_inference(self, prompt: str) -> ChatCompletionMessage:
+        CLEANUP_PROMPT = Path('./cleanup_prompt.md').read_text()
+        return self.simple_inference(prompt, model="gpt-3.5-turbo", messages=[{"role": "user", "content": CLEANUP_PROMPT}])
     
     def save_result(self, result: str):
         self.result_path.write_text(result)
