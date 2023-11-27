@@ -32,9 +32,9 @@ class RunManager:
         # configure result to output to file
         self.result_path = Path(f'.output/{self.time}/.result.md')
         
-    def l4_inference(self, prompt: str) -> ChatCompletionMessage:
+    def l4_inference(self, prompt: str, messages: list[ChatCompletionMessage] = []) -> ChatCompletionMessage:
         L4_PROMPT = Path('./l4_prompt.md').read_text()
-        return self.simple_inference(prompt, messages=[{"role": "system", "content": L4_PROMPT}])
+        return self.simple_inference(prompt, messages=messages + [{"role": "system", "content": L4_PROMPT}])
 
     def simple_inference(self, prompt: str, messages: list[ChatCompletionMessage] = [], model="gpt-3.5-turbo") -> ChatCompletionMessage:
         self.logger.info(f"inference ran with prompt:\n====================\n{prompt}\n====================")
@@ -51,9 +51,9 @@ class RunManager:
         self.logger.info(f"API returned with content:\n====================\n{content}\n====================")
         return content
 
-    def code_cleanup_inference(self, prompt: str) -> ChatCompletionMessage:
+    def code_cleanup_inference(self, prompt: str, messages: list[ChatCompletionMessage] = []) -> ChatCompletionMessage:
         CLEANUP_PROMPT = Path('./cleanup_prompt.md').read_text()
-        return self.simple_inference(prompt, model="gpt-4-1106-preview", messages=[{"role": "user", "content": CLEANUP_PROMPT}])
+        return self.simple_inference(prompt, model="gpt-4-1106-preview", messages=messages + [{"role": "user", "content": CLEANUP_PROMPT}])
     
     def save_result(self, result: str):
         self.result_path.write_text(result)
